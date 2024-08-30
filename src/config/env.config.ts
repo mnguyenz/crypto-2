@@ -10,5 +10,19 @@ export const env = {
         USER: process.env.DATABASE_USER,
         PASSWORD: process.env.DATABASE_PASSWORD,
         NAME: process.env.DATABASE_NAME
+    },
+    BINGX: {
+        M_API_KEY: process.env.M_BINGX_API_KEY,
+        M_API_SECRET: process.env.M_BINGX_API_SECRET,
+        X_API_KEY: process.env.X_BINGX_API_KEY,
+        X_API_SECRET: process.env.X_BINGX_API_SECRET
+    },
+    OKX: {
+        M_API_KEY: process.env.M_OKX_API_KEY,
+        M_API_SECRET: process.env.M_OKX_API_SECRET,
+        M_API_PASS: process.env.M_OKX_API_PASS,
+        X_API_KEY: process.env.X_OKX_API_KEY,
+        X_API_SECRET: process.env.X_OKX_API_SECRET,
+        X_API_PASS: process.env.X_OKX_API_PASS
     }
 };
