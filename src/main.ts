@@ -1,8 +1,14 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { env } from '~config/env.config';
+import { Bootstrap } from '~core/bootstrap';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+async function startApp(): Promise<void> {
+    const bootstrap = new Bootstrap();
+    await bootstrap.initApp();
+    bootstrap.initCors();
+    bootstrap.buildSwagger();
+    await bootstrap.start();
 }
-bootstrap();
+
+startApp()
+    .then(() => console.log(`Init app on port ${env.APP_PORT}`))
+    .catch(console.error);
