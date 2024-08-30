@@ -3,6 +3,7 @@ dotenv.config();
 
 export const env = {
     APP_PORT: process.env.APP_PORT || 4003,
+    ROOT_PATH: process.cwd(),
     DATABASE: {
         CONNECT: process.env.DATABASE_CONNECT as any,
         HOST: process.env.DATABASE_HOST,

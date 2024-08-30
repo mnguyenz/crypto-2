@@ -11,9 +11,8 @@ export class SeedsTask {
         private tradeBingxService: TradeBingxService
     ) {}
 
-    @Cron(CronExpression.EVERY_10_SECONDS)
+    // @Cron(CronExpression.EVERY_10_SECONDS)
     async seedTradesBingx(): Promise<void> {
-        console.log('MinhDebug x');
         await this.tradeOkxService.seedTradesOkx(AccountEnum.M);
         await this.tradeOkxService.seedTradesOkx(AccountEnum.X);
         await this.tradeBingxService.seedTradesBingx(AccountEnum.M);
