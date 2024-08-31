@@ -10,7 +10,8 @@ export const env = {
         PORT: Number(process.env.DATABASE_PORT),
         USER: process.env.DATABASE_USER,
         PASSWORD: process.env.DATABASE_PASSWORD,
-        NAME: process.env.DATABASE_NAME
+        NAME: process.env.DATABASE_NAME,
+        DATABASE_CA_PEM: process.env.DATABASE_CA_PEM
     },
     BINGX: {
         M_API_KEY: process.env.M_BINGX_API_KEY,

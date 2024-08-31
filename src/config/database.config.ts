@@ -18,7 +18,7 @@ const config = {
     logging: false,
     ssl: {
         rejectUnauthorized: true,
-        ca: readFileSync(join(__dirname, './../../assets', 'ca.pem')).toString()
+        ca: env.DATABASE.DATABASE_CA_PEM
     }
 };
 
