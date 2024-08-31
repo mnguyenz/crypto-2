@@ -27,5 +27,5 @@ jobs:
       - name: Buy BTC
         run: npm run wz-command bingx-daily-buy -- --symbol=BTC-USDT
         env:
-          BINGX_API_KEY: ${{ secrets.BINGX_API_KEY }}
-          BINGX_API_SECRET: ${{ secrets.BINGX_API_SECRET }}
+          X_BINGX_API_KEY: ${{ secrets.X_BINGX_API_KEY }}
+          X_BINGX_API_SECRET: ${{ secrets.X_BINGX_API_SECRET }}
