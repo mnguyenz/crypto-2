@@ -27,11 +27,20 @@ jobs:
       - name: Buy BTC
         run: npm run wz-command bingx-daily-buy -- --symbol=BTC-USDT
         env:
+          DATABASE_CA_PEM: ${{ secrets.DATABASE_CA_PEM }}
           DATABASE_CONNECT: ${{ secrets.DATABASE_CONNECT }}
           DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
           DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
           DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          M_BINGX_API_KEY: ${{ secrets.M_BINGX_API_KEY }}
+          M_BINGX_API_SECRET: ${{ secrets.M_BINGX_API_SECRET }}
+          M_OKX_API_KEY: ${{ secrets.M_OKX_API_KEY }}
+          M_OKX_API_PASS: ${{ secrets.M_OKX_API_PASS }}
+          M_OKX_API_SECRET: ${{ secrets.M_OKX_API_SECRET }}
           X_BINGX_API_KEY: ${{ secrets.X_BINGX_API_KEY }}
           X_BINGX_API_SECRET: ${{ secrets.X_BINGX_API_SECRET }}
+          X_OKX_API_KEY: ${{ secrets.X_OKX_API_KEY }}
+          X_OKX_API_PASS: ${{ secrets.X_OKX_API_PASS }}
+          X_OKX_API_SECRET: ${{ secrets.X_OKX_API_SECRET }}
