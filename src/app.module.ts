@@ -5,9 +5,10 @@ import { databaseConfig } from '~config/database.config';
 import { scheduleConfig } from '~config/schedule.config';
 import { TaskModule } from '~tasks/task.module';
 import { commandConfig } from '~config/command.config';
+import { BingxApiModule } from '~bingx-api/bingx-api.module';
 
 @Module({
-    imports: [commandConfig, databaseConfig, scheduleConfig, TaskModule],
+    imports: [commandConfig, databaseConfig, scheduleConfig, BingxApiModule, TaskModule],
     controllers: [AppController],
     providers: [AppService]
 })

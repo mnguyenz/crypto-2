@@ -39,27 +39,16 @@ export class CrawlTradeDbCommand extends BaseCommand {
     }
 
     private async crawlDatas(localConnection: DataSource) {
-        let page = 1;
-        const perPage = 1;
         await this.dataSource.transaction(async () => {
             try {
-                let flag: boolean = true;
-                do {
-                    const offset = (page - 1) * perPage;
-                    const trades = await localConnection.query(
-                        `SELECT * FROM "Trade" ORDER BY "tradeTime" DESC LIMIT ${perPage} OFFSET ${offset}`
-                    );
-                    if (trades.length) {
-                        this.tradeRepository.upsert(trades, ['orderIdReference', 'exchange']);
-                        this.info(
-                            `Inserted ${trades.length} items successfully with page: ${page} and perPage: ${perPage}`
-                        );
-                        await delay(1000);
-                        page++;
-                    } else {
-                        flag = false;
-                    }
-                } while (flag);
+                const crawledTrades = await this.tradeRepository.find();
+                const crawledTradeIds = crawledTrades.map((trade) => trade.orderIdReference);
+                const trades = await localConnection.query(`SELECT * FROM "Trade"`);
+                const notCrawledTrades = trades.filter((trade) => !crawledTradeIds.includes(trade.orderIdReference));
+                for (const trade of notCrawledTrades) {
+                    await this.tradeRepository.save(trade);
+                    await delay(1000);
+                }
             } catch (error) {
                 this.error(`Fail crawl trade data. Error: ${error.message}`);
                 throw error;

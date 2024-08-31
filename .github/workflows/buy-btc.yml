@@ -1,0 +1,31 @@
+name: "Cronjob Buy BTC"
+
+on:
+  schedule:
+    - cron: "0 0-23/3 * * *"
+
+jobs:
+  buy-btc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create Build Files
+        run: npm run build
+
+      - name: Buy BTC
+        run: npm run wz-command bingx-daily-buy -- --symbol=BTC-USDT
+        env:
+          BINGX_API_KEY: ${{ secrets.BINGX_API_KEY }}
+          BINGX_API_SECRET: ${{ secrets.BINGX_API_SECRET }}
