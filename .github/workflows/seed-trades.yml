@@ -2,7 +2,7 @@ name: "Seed Trades"
 
 on:
   schedule:
-    - cron: "59 * * * *"
+    - cron: "35 * * * *"
 
 jobs:
   seed-trades:
