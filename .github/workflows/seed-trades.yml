@@ -1,11 +1,11 @@
-name: "Cronjob Buy ETH"
+name: "Seed Trades"
 
 on:
   schedule:
-    - cron: "0 1,13 * * *"
+    - cron: "59 * * * *"
 
 jobs:
-  buy-eth:
+  seed-trades:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,8 +24,8 @@ jobs:
       - name: Create Build Files
         run: npm run build
 
-      - name: Buy ETH
-        run: npm run wz-command bingx-daily-buy -- --symbol=ETH-USDT
+      - name: Seed Trades
+        run: npm run wz-command seed-trades
         env:
           DATABASE_CONNECT: ${{ secrets.DATABASE_CONNECT }}
           DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
@@ -33,6 +33,7 @@ jobs:
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
           DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
           DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          M_BINGX_API_KEY: ${{ secrets.M_BINGX_API_KEY }}
+          M_BINGX_API_SECRET: ${{ secrets.M_BINGX_API_SECRET }}
           X_BINGX_API_KEY: ${{ secrets.X_BINGX_API_KEY }}
           X_BINGX_API_SECRET: ${{ secrets.X_BINGX_API_SECRET }}
-
