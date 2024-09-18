@@ -7,6 +7,8 @@ import { TaskModule } from '~tasks/task.module';
 import { commandConfig } from '~config/command.config';
 import { BingxApiModule } from '~bingx-api/bingx-api.module';
 import { AverageCalculationModule } from '~average-calculation/average-calculation.module';
+import { OrderModule } from '~order/order.module';
+import { OkxApiModule } from '~okx-api/okx-api.module';
 
 @Module({
     imports: [
@@ -15,7 +17,9 @@ import { AverageCalculationModule } from '~average-calculation/average-calculati
         scheduleConfig,
         AverageCalculationModule,
         BingxApiModule,
-        TaskModule
+        TaskModule,
+        OrderModule,
+        OkxApiModule
     ],
     controllers: [AppController],
     providers: [AppService]

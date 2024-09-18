@@ -25,7 +25,7 @@ jobs:
         run: npm run build
 
       - name: Buy ETH
-        run: npm run wz-command bingx-daily-buy -- --symbol=ETH-USDT
+        run: npm run wz-command daily-buy -- --asset=ETH
         env:
           DATABASE_CA_PEM: ${{ secrets.DATABASE_CA_PEM }}
           DATABASE_CONNECT: ${{ secrets.DATABASE_CONNECT }}

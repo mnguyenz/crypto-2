@@ -13,6 +13,5 @@ export const X_OKX_CLIENT = new RestClient({
     apiPass: env.OKX.X_API_PASS
 });
 
-export const OKX_POSTFIX_SYMBOL_USDT = '-USDT';
-
 export const OKX_MIN_SAVING_BTC_ETH = 0.0001;
+export const MAX_TIER_1_USD_EARN = 1000;

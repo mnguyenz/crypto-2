@@ -1,0 +1,4 @@
+export const MAX_FNG_TO_DAILY_BUY = 10;
+
+export const BINGX_OKX_POSTFIX_SYMBOL_USDT = '-USDT';
+export const BINGX_OKX_POSTFIX_SYMBOL_USDC = '-USDC';
