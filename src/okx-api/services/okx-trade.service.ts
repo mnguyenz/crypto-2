@@ -1,16 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { OrderSideEnum } from 'bingx-trading-api';
-import { X_OKX_CLIENT } from '~core/constants/okx.constant';
+import { RestClient } from 'okx-api';
+import { M_OKX_CLIENT, X_OKX_CLIENT } from '~core/constants/okx.constant';
+import { AccountEnum } from '~core/enums/exchanges.enum';
 import { OkxNewLimitOrderParam } from '~core/types/okx-new-limit-order.param';
 
 @Injectable()
 export class OkxTradeService {
     constructor() {}
 
-    async newLimitOrder(okxNewLimitOrderParam: OkxNewLimitOrderParam): Promise<any> {
+    async newLimitOrder(okxNewLimitOrderParam: OkxNewLimitOrderParam, account?: AccountEnum): Promise<any> {
+        let client: RestClient;
+        if (account === AccountEnum.M) {
+            client = M_OKX_CLIENT;
+        } else {
+            client = X_OKX_CLIENT;
+        }
         const { symbol, side, quantity, price } = okxNewLimitOrderParam;
         try {
-            return X_OKX_CLIENT.submitOrder({
+            return client.submitOrder({
                 instId: symbol,
                 tdMode: 'cash',
                 side: side === OrderSideEnum.BUY ? 'buy' : 'sell',
@@ -19,7 +27,7 @@ export class OkxTradeService {
                 px: price.toString()
             });
         } catch (error) {
-            console.error('newOrder OKX error:', error);
+            console.error('OKX OkxTradeService newLimitOrder error:', error);
         }
     }
 }

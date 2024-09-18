@@ -5,9 +5,10 @@ import { TradeOkxService } from './services/trade-okx.service';
 import { TypeOrmHelperModule } from '~core/modules/typeorm-module.module';
 import { CrawlTradeDbCommand } from './commands/crawl-trade-db.command';
 import { SeedTradesCommand } from './commands/seed-trades.command';
+import { OkxApiModule } from '~okx-api/okx-api.module';
 
 @Module({
-    imports: [TypeOrmHelperModule.forCustomRepository([TradeRepository])],
+    imports: [TypeOrmHelperModule.forCustomRepository([TradeRepository]), OkxApiModule],
     controllers: [],
     providers: [TradeOkxService, TradeBingxService, CrawlTradeDbCommand, SeedTradesCommand],
     exports: [TradeOkxService, TradeBingxService]

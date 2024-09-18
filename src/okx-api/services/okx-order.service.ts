@@ -7,14 +7,12 @@ import { OrderSideEnum } from 'bingx-trading-api';
 import { OkxTradeService } from './okx-trade.service';
 import { OkxRedeemUsdThenOrderParam } from '~core/types/okx-redeem-usd-then-order.param';
 import { X_OKX_CLIENT } from '~core/constants/okx.constant';
-import { OkxMarketService } from './okx-market.service';
 
 @Injectable()
 export class OkxOrderService {
     constructor(
         private okxEarnService: OkxEarnService,
-        private okxTradeService: OkxTradeService,
-        private okxMarketService: OkxMarketService
+        private okxTradeService: OkxTradeService
     ) {}
 
     async redeemUsdThenOrder(
@@ -28,23 +26,19 @@ export class OkxOrderService {
         } else if (symbol.endsWith(ASSETS.FIAT.USDC)) {
             asset = ASSETS.FIAT.USDC;
         }
-        try {
-            await this.okxEarnService.redeem(asset, MIN_NOTIONAL, account);
-            await this.okxTradeService.newLimitOrder({
+        await this.okxEarnService.redeem(asset, MIN_NOTIONAL, account);
+        await this.okxTradeService.newLimitOrder(
+            {
                 symbol,
                 side: OrderSideEnum.BUY,
                 price,
                 quantity
-            });
-        } catch (error) {
-            console.error('OKX OkxOrderService RedeemThenOrder error:', error);
-        }
+            },
+            account
+        );
     }
 
-    async buyMinNotional(symbol: string, account?: AccountEnum): Promise<void> {
-        const okxOrderBook = await this.okxMarketService.getOrderBook(symbol, 20);
-        const currentPrice = okxOrderBook.bids[19][0];
-
+    async buyMinNotional(symbol: string, currentPrice: number, account?: AccountEnum): Promise<void> {
         let lotSize: number;
         try {
             const exchangeInformations = await X_OKX_CLIENT.getInstruments('SPOT', undefined, undefined, symbol);
