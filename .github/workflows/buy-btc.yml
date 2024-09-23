@@ -25,7 +25,7 @@ jobs:
         run: npm run build
 
       - name: Buy BTC
-        run: npm run wz-command daily-buy -- --asset=BTC
+        run: npm run wz-command daily-buy -- --asset=BTC --exchange=Okx
         env:
           DATABASE_CA_PEM: ${{ secrets.DATABASE_CA_PEM }}
           DATABASE_CONNECT: ${{ secrets.DATABASE_CONNECT }}
