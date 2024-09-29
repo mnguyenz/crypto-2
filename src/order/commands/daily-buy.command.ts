@@ -104,7 +104,7 @@ export class DailyBuyCommand extends BaseCommand {
         if (getAverage.dcaBuy > currentPrice) {
             return true;
         } else {
-            if (getAverage.maxBuy < currentPrice) {
+            if (getAverage.maxBuy < currentPrice || asset !== ASSETS.CRYPTO.BTC) {
                 return false;
             }
             const { data: fngData } = await axios.get(FNG_API);
