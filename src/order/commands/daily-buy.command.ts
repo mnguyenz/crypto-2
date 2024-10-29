@@ -48,20 +48,11 @@ export class DailyBuyCommand extends BaseCommand {
         const options = this.program.opts();
         const { asset, exchange } = options;
         try {
-            if (asset === ASSETS.CRYPTO.ETH) {
-                const usdcXOkxSavings = await this.okxEarnService.getSavingBalance(ASSETS.FIAT.USDC, AccountEnum.X);
-                if (usdcXOkxSavings > MAX_TIER_1_USD_EARN + MIN_NOTIONAL) {
-                    await this.okxBuy(asset, true, AccountEnum.X);
-                } else {
-                    const usdcMOkxSavings = await this.okxEarnService.getSavingBalance(ASSETS.FIAT.USDC, AccountEnum.M);
-                    if (usdcMOkxSavings > MAX_TIER_1_USD_EARN + MIN_NOTIONAL) {
-                        await this.okxBuy(asset, true, AccountEnum.M);
-                    } else {
-                        await this.dailyBuy(asset, exchange);
-                    }
-                }
+            const usdcMOkxSavings = await this.okxEarnService.getSavingBalance(ASSETS.FIAT.USDC, AccountEnum.M);
+            if (usdcMOkxSavings > MAX_TIER_1_USD_EARN + MIN_NOTIONAL) {
+                await this.okxBuy(asset, true, AccountEnum.M);
             } else {
-                await this.dailyBuy(asset, exchange);
+                await this.dailyBuy(asset, exchange, AccountEnum.M);
             }
         } catch (error) {
             this.error(`Fail Daily Buy. Error: ${error.message}`);
@@ -69,9 +60,9 @@ export class DailyBuyCommand extends BaseCommand {
         }
     }
 
-    private async dailyBuy(asset: string, exchange: string): Promise<void> {
+    private async dailyBuy(asset: string, exchange: string, account?: AccountEnum): Promise<void> {
         if (exchange.toUpperCase() === ExchangeEnum.OKX.toUpperCase()) {
-            await this.okxBuy(asset, false, AccountEnum.X);
+            await this.okxBuy(asset, false, account);
         } else {
             await this.bingXBuy(asset);
         }
@@ -82,6 +73,9 @@ export class DailyBuyCommand extends BaseCommand {
         const currentPrice = await X_BINGX_CLIENT.symbolPriceTicker({ symbol });
         if (await this.checkIsBuyOrNot(asset, currentPrice.data[0]?.trades[0].price)) {
             await this.bingxOrderService.buyMarket(symbol);
+            if (asset === ASSETS.CRYPTO.ETH) {
+                await this.bingxOrderService.buyMarket(`${ASSETS.CRYPTO.BTC}${BINGX_OKX_POSTFIX_SYMBOL_USDT}`);
+            }
         }
     }
 
@@ -96,15 +90,21 @@ export class DailyBuyCommand extends BaseCommand {
         const currentPrice = okxOrderBook.bids[9][0];
         if (await this.checkIsBuyOrNot(asset, currentPrice)) {
             await this.okxOrderService.buyMinNotional(symbol, currentPrice, account);
+            if (asset === ASSETS.CRYPTO.ETH) {
+                const btcSymbol = `${ASSETS.CRYPTO.BTC}${BINGX_OKX_POSTFIX_SYMBOL_USDT}`;
+                const btcOrderBook = await this.okxMarketService.getOrderBook(btcSymbol, 10);
+                const btcCurrentPrice = btcOrderBook.bids[9][0];
+                await this.okxOrderService.buyMinNotional(btcSymbol, btcCurrentPrice, account);
+            }
         }
     }
 
     private async checkIsBuyOrNot(asset: string, currentPrice: number): Promise<boolean> {
         const getAverage = await this.averageCalculationService.getAverageByAsset(asset);
-        if (getAverage.dcaBuy > currentPrice) {
+        if (getAverage.dcaBuyAfterSell > currentPrice) {
             return true;
         } else {
-            if (getAverage.maxBuy < currentPrice || asset !== ASSETS.CRYPTO.BTC) {
+            if (asset !== ASSETS.CRYPTO.BTC) {
                 return false;
             }
             const { data: fngData } = await axios.get(FNG_API);
