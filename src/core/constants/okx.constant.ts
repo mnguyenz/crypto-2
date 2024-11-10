@@ -14,4 +14,5 @@ export const X_OKX_CLIENT = new RestClient({
 });
 
 export const OKX_MIN_SAVING_BTC_ETH = 0.0001;
+export const OKX_MIN_SAVING_USD = 0.01;
 export const MAX_TIER_1_USD_EARN = 1000;

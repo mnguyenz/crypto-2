@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { RestClient } from 'okx-api';
 import { ASSETS } from '~core/constants/crypto-code.constant';
-import { M_OKX_CLIENT, OKX_MIN_SAVING_BTC_ETH, X_OKX_CLIENT } from '~core/constants/okx.constant';
+import { M_OKX_CLIENT, OKX_MIN_SAVING_BTC_ETH, OKX_MIN_SAVING_USD, X_OKX_CLIENT } from '~core/constants/okx.constant';
 import { AccountEnum } from '~core/enums/exchanges.enum';
 
 @Injectable()
@@ -64,8 +64,20 @@ export class OkxEarnService {
                     to: '6',
                     type: '0'
                 });
-                await client.savingsPurchaseRedemption(asset, amount, 'purchase', '0.01');
             }
+            if (
+                (asset === ASSETS.FIAT.USDT || asset === ASSETS.FIAT.USDC) &&
+                parseFloat(amount) >= OKX_MIN_SAVING_USD
+            ) {
+                await client.fundsTransfer({
+                    ccy: asset,
+                    amt: amount,
+                    from: '18',
+                    to: '6',
+                    type: '0'
+                });
+            }
+            await client.savingsPurchaseRedemption(asset, amount, 'purchase', '0.01');
         } catch (error) {
             console.error('OKX OkxEarnService purchaseMaxToSaving error:', error);
         }

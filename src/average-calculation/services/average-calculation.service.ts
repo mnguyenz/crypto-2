@@ -47,7 +47,7 @@ export class AverageCalculationService {
                 ? quantity * price - fee
                 : quantity * price;
             totalSellAmount += finalSellAmount;
-            totalSellQuantity = +quantity;
+            totalSellQuantity += +quantity;
         });
 
         const dcaBuy = totalBuyAmount / totalBuyQuantity;

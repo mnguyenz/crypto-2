@@ -7,6 +7,7 @@ import { OrderSideEnum } from 'bingx-trading-api';
 import { OkxTradeService } from './okx-trade.service';
 import { OkxRedeemUsdThenOrderParam } from '~core/types/okx-redeem-usd-then-order.param';
 import { X_OKX_CLIENT } from '~core/constants/okx.constant';
+import { OkxRedeemCryptoThenOrderParam } from '~core/types/okx-redeem-crypto-then-order.param';
 
 @Injectable()
 export class OkxOrderService {
@@ -32,6 +33,43 @@ export class OkxOrderService {
                 symbol,
                 side: OrderSideEnum.BUY,
                 price,
+                quantity
+            },
+            account
+        );
+    }
+
+    async redeemCryptoThenOrder(
+        okxRedeemCryptoThenOrderParam: OkxRedeemCryptoThenOrderParam,
+        account?: AccountEnum
+    ): Promise<void> {
+        const { asset, symbol, price, quantity } = okxRedeemCryptoThenOrderParam;
+        await this.okxEarnService.redeem(asset, quantity, account);
+        await this.okxTradeService.newLimitOrder(
+            {
+                symbol,
+                side: OrderSideEnum.SELL,
+                price,
+                quantity
+            },
+            account
+        );
+    }
+
+    async sellMin(asset: string, symbol: string, currentPrice: number, account?: AccountEnum): Promise<void> {
+        let quantity: number;
+        try {
+            const exchangeInformations = await X_OKX_CLIENT.getInstruments('SPOT', undefined, undefined, symbol);
+            quantity = parseFloat(exchangeInformations[0].minSz);
+        } catch (error) {
+            console.error('OKX OkxOrderService sellMin GetInstruments error:', error);
+        }
+
+        await this.redeemCryptoThenOrder(
+            {
+                asset,
+                symbol,
+                price: currentPrice,
                 quantity
             },
             account

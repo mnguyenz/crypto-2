@@ -12,7 +12,7 @@ import {
     BINGX_OKX_POSTFIX_SYMBOL_USDC,
     BINGX_OKX_POSTFIX_SYMBOL_USDT,
     MAX_FNG_TO_DAILY_BUY
-} from '~core/constants/daily-buy.constant';
+} from '~core/constants/daily-order.constant';
 import { OkxOrderService } from '~okx-api/services/okx-order.service';
 import { MAX_TIER_1_USD_EARN } from '~core/constants/okx.constant';
 import { OkxMarketService } from '~okx-api/services/okx-market.service';
@@ -73,9 +73,6 @@ export class DailyBuyCommand extends BaseCommand {
         const currentPrice = await X_BINGX_CLIENT.symbolPriceTicker({ symbol });
         if (await this.checkIsBuyOrNot(asset, currentPrice.data[0]?.trades[0].price)) {
             await this.bingxOrderService.buyMarket(symbol);
-            if (asset === ASSETS.CRYPTO.ETH) {
-                await this.bingxOrderService.buyMarket(`${ASSETS.CRYPTO.BTC}${BINGX_OKX_POSTFIX_SYMBOL_USDT}`);
-            }
         }
     }
 
@@ -90,12 +87,6 @@ export class DailyBuyCommand extends BaseCommand {
         const currentPrice = okxOrderBook.bids[9][0];
         if (await this.checkIsBuyOrNot(asset, currentPrice)) {
             await this.okxOrderService.buyMinNotional(symbol, currentPrice, account);
-            if (asset === ASSETS.CRYPTO.ETH) {
-                const btcSymbol = `${ASSETS.CRYPTO.BTC}${BINGX_OKX_POSTFIX_SYMBOL_USDT}`;
-                const btcOrderBook = await this.okxMarketService.getOrderBook(btcSymbol, 10);
-                const btcCurrentPrice = btcOrderBook.bids[9][0];
-                await this.okxOrderService.buyMinNotional(btcSymbol, btcCurrentPrice, account);
-            }
         }
     }
 
@@ -104,7 +95,7 @@ export class DailyBuyCommand extends BaseCommand {
         if (getAverage.dcaBuyAfterSell > currentPrice) {
             return true;
         } else {
-            if (asset !== ASSETS.CRYPTO.BTC) {
+            if (getAverage.maxBuy < currentPrice || asset !== ASSETS.CRYPTO.BTC) {
                 return false;
             }
             const { data: fngData } = await axios.get(FNG_API);

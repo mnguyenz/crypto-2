@@ -1,0 +1,47 @@
+name: "Cronjob Sell ETH"
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+
+jobs:
+  sell-eth:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create Build Files
+        run: npm run build
+
+      - name: Sell ETH
+        run: npm run wz-command daily-sell -- --asset=ETH --exchange=Okx
+        env:
+          DATABASE_CA_PEM: ${{ secrets.DATABASE_CA_PEM }}
+          DATABASE_CONNECT: ${{ secrets.DATABASE_CONNECT }}
+          DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+          DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          M_BINGX_API_KEY: ${{ secrets.M_BINGX_API_KEY }}
+          M_BINGX_API_SECRET: ${{ secrets.M_BINGX_API_SECRET }}
+          M_OKX_API_KEY: ${{ secrets.M_OKX_API_KEY }}
+          M_OKX_API_PASS: ${{ secrets.M_OKX_API_PASS }}
+          M_OKX_API_SECRET: ${{ secrets.M_OKX_API_SECRET }}
+          X_BINGX_API_KEY: ${{ secrets.X_BINGX_API_KEY }}
+          X_BINGX_API_SECRET: ${{ secrets.X_BINGX_API_SECRET }}
+          X_OKX_API_KEY: ${{ secrets.X_OKX_API_KEY }}
+          X_OKX_API_PASS: ${{ secrets.X_OKX_API_PASS }}
+          X_OKX_API_SECRET: ${{ secrets.X_OKX_API_SECRET }}
+

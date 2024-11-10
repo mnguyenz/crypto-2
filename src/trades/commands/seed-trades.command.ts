@@ -48,5 +48,9 @@ export class SeedTradesCommand extends BaseCommand {
         await this.okxEarnService.purchaseMaxToSaving(ASSETS.CRYPTO.ETH, AccountEnum.M);
         await this.okxEarnService.purchaseMaxToSaving(ASSETS.CRYPTO.BTC, AccountEnum.X);
         await this.okxEarnService.purchaseMaxToSaving(ASSETS.CRYPTO.BTC, AccountEnum.M);
+        await this.okxEarnService.purchaseMaxToSaving(ASSETS.FIAT.USDT, AccountEnum.M);
+        await this.okxEarnService.purchaseMaxToSaving(ASSETS.FIAT.USDT, AccountEnum.X);
+        await this.okxEarnService.purchaseMaxToSaving(ASSETS.FIAT.USDC, AccountEnum.M);
+        await this.okxEarnService.purchaseMaxToSaving(ASSETS.FIAT.USDC, AccountEnum.X);
     }
 }
