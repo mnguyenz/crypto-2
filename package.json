@@ -21,6 +21,7 @@
     "wz-command": "wz-command"
   },
   "dependencies": {
+    "@binance/connector-typescript": "0.3.13",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",

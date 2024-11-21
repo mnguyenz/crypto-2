@@ -7,8 +7,7 @@ import { ASSETS } from '~core/constants/crypto-code.constant';
 import {
     BINGX_OKX_POSTFIX_SYMBOL_USDC,
     BINGX_OKX_POSTFIX_SYMBOL_USDT,
-    MIN_PROFIT_TO_SELL,
-    OKX_MIN_ORDER_ETH
+    MIN_PROFIT_TO_SELL
 } from '~core/constants/daily-order.constant';
 import { OkxOrderService } from '~okx-api/services/okx-order.service';
 import { OkxMarketService } from '~okx-api/services/okx-market.service';

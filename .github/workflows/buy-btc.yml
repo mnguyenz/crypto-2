@@ -2,7 +2,7 @@ name: "Cronjob Buy BTC"
 
 on:
   schedule:
-    - cron: "0 0-23/3 * * *"
+    - cron: "0 0-23/2 * * *"
 
 jobs:
   buy-btc:
