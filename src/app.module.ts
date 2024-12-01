@@ -9,6 +9,7 @@ import { BingxApiModule } from '~bingx-api/bingx-api.module';
 import { AverageCalculationModule } from '~average-calculation/average-calculation.module';
 import { OrderModule } from '~order/order.module';
 import { OkxApiModule } from '~okx-api/okx-api.module';
+import { BinanceApiModule } from '~binance-api/binance-api.module';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { OkxApiModule } from '~okx-api/okx-api.module';
         databaseConfig,
         scheduleConfig,
         AverageCalculationModule,
+        BinanceApiModule,
         BingxApiModule,
         TaskModule,
         OrderModule,

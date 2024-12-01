@@ -44,10 +44,7 @@ export class TradeOkxService {
     }
 
     okxGetOrderHistory(after?: string, account?: AccountEnum): Promise<HistoricOrder[]> {
-        if (account === AccountEnum.M) {
-            return M_OKX_CLIENT.getOrderHistoryArchive({ instType: 'SPOT', after });
-        } else {
-            return X_OKX_CLIENT.getOrderHistoryArchive({ instType: 'SPOT', after });
-        }
+        const client = account === AccountEnum.M ? M_OKX_CLIENT : X_OKX_CLIENT;
+        return client.getOrderHistoryArchive({ instType: 'SPOT', after });
     }
 }

@@ -11,16 +11,10 @@ export class TradeBingxService {
 
     async seedTradesBingx(account?: AccountEnum): Promise<void> {
         let orders: SingleOrderResponse[] = [];
-        let queryOrderHistoryResponse: OrdersResponse;
-        if (account === AccountEnum.M) {
-            queryOrderHistoryResponse = await M_BINGX_CLIENT.queryOrderHistory({
-                status: OrderStatusEnum.FILLED
-            });
-        } else {
-            queryOrderHistoryResponse = await X_BINGX_CLIENT.queryOrderHistory({
-                status: OrderStatusEnum.FILLED
-            });
-        }
+        const client = account === AccountEnum.M ? M_BINGX_CLIENT : X_BINGX_CLIENT;
+        const queryOrderHistoryResponse = await client.queryOrderHistory({
+            status: OrderStatusEnum.FILLED
+        });
         orders = queryOrderHistoryResponse.data?.orders;
 
         const trades = orders.map((order: SingleOrderResponse) => ({
