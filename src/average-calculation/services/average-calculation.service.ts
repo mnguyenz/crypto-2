@@ -19,6 +19,7 @@ export class AverageCalculationService {
                 buyAmount: 0,
                 dcaSell: 0,
                 minSell: 0,
+                maxSell: 0,
                 sellQuantity: 0,
                 sellAmount: 0
             };
@@ -26,6 +27,7 @@ export class AverageCalculationService {
 
         const maxBuy = await this.tradeRepository.maximum('price', { asset, side: OrderSideEnum.BUY });
         const minSell = await this.tradeRepository.minimum('price', { asset, side: OrderSideEnum.SELL });
+        const maxSell = await this.tradeRepository.maximum('price', { asset, side: OrderSideEnum.SELL });
 
         const buyTrades = trades.filter((trade) => trade.side === OrderSideEnum.BUY);
         const sellTrades = trades.filter((trade) => trade.side === OrderSideEnum.SELL);
@@ -86,6 +88,7 @@ export class AverageCalculationService {
             buyAmount: totalBuyAmount,
             dcaSell: totalSellAmount / totalSellQuantity,
             minSell,
+            maxSell,
             sellQuantity: totalSellQuantity,
             sellAmount: totalSellAmount
         };
