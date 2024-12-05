@@ -7,6 +7,7 @@ import { ASSETS } from '~core/constants/crypto-code.constant';
 import {
     BINGX_OKX_POSTFIX_SYMBOL_USDC,
     BINGX_OKX_POSTFIX_SYMBOL_USDT,
+    MIN_DCA_PROFIT,
     MIN_PROFIT_TO_SELL
 } from '~core/constants/daily-order.constant';
 import { OkxOrderService } from '~okx-api/services/okx-order.service';
@@ -84,7 +85,11 @@ export class DailySellCommand extends BaseCommand {
 
     private async checkIsSellOrNot(asset: string, currentPrice: number): Promise<boolean> {
         const getAverage = await this.averageCalculationService.getAverageByAsset(asset);
-        const targetPrice = asset === ASSETS.CRYPTO.BTC ? getAverage.maxBuy : getAverage.dcaBuyAfterSell;
-        return targetPrice * MIN_PROFIT_TO_SELL < currentPrice;
+        const { maxBuy, maxSell, dcaSell } = getAverage;
+        if (asset === ASSETS.CRYPTO.BTC) {
+            return maxBuy * MIN_PROFIT_TO_SELL < currentPrice && maxSell < currentPrice;
+        } else {
+            return maxBuy * MIN_DCA_PROFIT < currentPrice && dcaSell * MIN_DCA_PROFIT < currentPrice;
+        }
     }
 }

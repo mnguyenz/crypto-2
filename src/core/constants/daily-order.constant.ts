@@ -4,6 +4,7 @@ export const BINGX_OKX_POSTFIX_SYMBOL_USDT = '-USDT';
 export const BINGX_OKX_POSTFIX_SYMBOL_USDC = '-USDC';
 
 export const MIN_PROFIT_TO_SELL = 1.2;
+export const MIN_DCA_PROFIT = 1.05;
 
 export const OKX_MIN_ORDER_ETH = 0.0001;
 export const OKX_MIN_ORDER_BTC = 0.00001;

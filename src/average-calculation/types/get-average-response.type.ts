@@ -6,6 +6,7 @@ export type GetAverageResponse = {
     buyAmount: number;
     dcaSell: number;
     minSell: number;
+    maxSell: number;
     sellQuantity: number;
     sellAmount: number;
 };
