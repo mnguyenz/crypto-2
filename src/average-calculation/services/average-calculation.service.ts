@@ -36,7 +36,7 @@ export class AverageCalculationService {
         let totalBuyAmount: number = 0;
         buyTrades.forEach((trade) => {
             const { price, asset, quantity, feeAsset, fee } = trade;
-            const finalQuantity = feeAsset === asset ? quantity - fee : quantity;
+            const finalQuantity = feeAsset === asset ? quantity - fee : +quantity;
             totalBuyQuantity += finalQuantity;
             totalBuyAmount += quantity * price;
         });

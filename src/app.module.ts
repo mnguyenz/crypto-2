@@ -10,6 +10,7 @@ import { AverageCalculationModule } from '~average-calculation/average-calculati
 import { OrderModule } from '~order/order.module';
 import { OkxApiModule } from '~okx-api/okx-api.module';
 import { BinanceApiModule } from '~binance-api/binance-api.module';
+import { BitgetApiModule } from '~bitget-api/bitget-api.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { BinanceApiModule } from '~binance-api/binance-api.module';
         AverageCalculationModule,
         BinanceApiModule,
         BingxApiModule,
+        BitgetApiModule,
         TaskModule,
         OrderModule,
         OkxApiModule

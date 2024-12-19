@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { OrderStatusEnum, OrderSideEnum, OrdersResponse, SingleOrderResponse } from 'bingx-trading-api';
+import { OrderStatusEnum, OrderSideEnum, SingleOrderResponse } from 'bingx-trading-api';
 import { M_BINGX_CLIENT, X_BINGX_CLIENT } from '~core/constants/bingx.constant';
 import { AccountEnum, ExchangeEnum } from '~core/enums/exchanges.enum';
 import { TradeEntity } from '~entities/trade.entity';

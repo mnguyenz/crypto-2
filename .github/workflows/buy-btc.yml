@@ -25,7 +25,7 @@ jobs:
         run: npm run build
 
       - name: Buy BTC
-        run: npm run wz-command daily-buy -- --asset=BTC --exchange=Okx
+        run: npm run wz-command daily-buy -- --asset=BTC --exchange=Bitget
         env:
           DATABASE_CA_PEM: ${{ secrets.DATABASE_CA_PEM }}
           DATABASE_CONNECT: ${{ secrets.DATABASE_CONNECT }}
@@ -36,6 +36,12 @@ jobs:
           DATABASE_USER: ${{ secrets.DATABASE_USER }}
           M_BINGX_API_KEY: ${{ secrets.M_BINGX_API_KEY }}
           M_BINGX_API_SECRET: ${{ secrets.M_BINGX_API_SECRET }}
+          M_BITGET_API_KEY: ${{ secrets.M_BITGET_API_KEY }}
+          M_BITGET_API_SECRET: ${{ secrets.M_BITGET_API_SECRET }}
+          M_BITGET_API_PASS: ${{ secrets.M_BITGET_API_PASS }}
+          X_BITGET_API_KEY: ${{ secrets.X_BITGET_API_KEY }}
+          X_BITGET_API_SECRET: ${{ secrets.X_BITGET_API_SECRET }}
+          X_BITGET_API_PASS: ${{ secrets.X_BITGET_API_PASS }}
           M_OKX_API_KEY: ${{ secrets.M_OKX_API_KEY }}
           M_OKX_API_PASS: ${{ secrets.M_OKX_API_PASS }}
           M_OKX_API_SECRET: ${{ secrets.M_OKX_API_SECRET }}

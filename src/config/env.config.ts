@@ -26,6 +26,14 @@ export const env = {
         X_API_KEY: process.env.X_BINGX_API_KEY,
         X_API_SECRET: process.env.X_BINGX_API_SECRET
     },
+    BITGET: {
+        M_API_KEY: process.env.M_BITGET_API_KEY,
+        M_API_SECRET: process.env.M_BITGET_API_SECRET,
+        M_API_PASS: process.env.M_BITGET_API_PASS,
+        X_API_KEY: process.env.X_BITGET_API_KEY,
+        X_API_SECRET: process.env.X_BITGET_API_SECRET,
+        X_API_PASS: process.env.X_BITGET_API_PASS
+    },
     OKX: {
         M_API_KEY: process.env.M_OKX_API_KEY,
         M_API_SECRET: process.env.M_OKX_API_SECRET,

@@ -11,12 +11,14 @@ import { ASSETS } from '~core/constants/crypto-code.constant';
 import {
     BINGX_OKX_POSTFIX_SYMBOL_USDC,
     BINGX_OKX_POSTFIX_SYMBOL_USDT,
+    BITGET_POSTFIX_SYMBOL_USDT,
     MAX_FNG_TO_DAILY_BUY
 } from '~core/constants/daily-order.constant';
 import { OkxOrderService } from '~okx-api/services/okx-order.service';
-import { MAX_TIER_1_USD_EARN } from '~core/constants/okx.constant';
 import { OkxMarketService } from '~okx-api/services/okx-market.service';
 import { randomPercentage } from '~core/helpers/random.helper';
+import { BitgetOrderService } from '~bitget-api/services/bitget-order.service';
+import { BITGET_PUBLIC_CLIENT } from '~core/constants/bitget.constant';
 
 @Command({
     signature: 'daily-buy',
@@ -37,6 +39,7 @@ export class DailyBuyCommand extends BaseCommand {
     constructor(
         private averageCalculationService: AverageCalculationService,
         private bingxOrderService: BingxOrderService,
+        private bitgetOrderService: BitgetOrderService,
         private okxEarnService: OkxEarnService,
         private okxOrderService: OkxOrderService,
         private okxMarketService: OkxMarketService
@@ -48,12 +51,7 @@ export class DailyBuyCommand extends BaseCommand {
         const options = this.program.opts();
         const { asset, exchange } = options;
         try {
-            const usdcMOkxSavings = await this.okxEarnService.getSavingBalance(ASSETS.FIAT.USDC, AccountEnum.M);
-            if (usdcMOkxSavings > MAX_TIER_1_USD_EARN + MIN_NOTIONAL) {
-                await this.okxBuy(asset, true, AccountEnum.M);
-            } else {
-                await this.dailyBuy(asset, exchange, AccountEnum.M);
-            }
+            await this.dailyBuy(asset || ASSETS.CRYPTO.BTC, exchange || ExchangeEnum.BITGET, AccountEnum.X);
         } catch (error) {
             this.error(`Fail Daily Buy. Error: ${error.message}`);
             throw error;
@@ -63,16 +61,29 @@ export class DailyBuyCommand extends BaseCommand {
     private async dailyBuy(asset: string, exchange: string, account?: AccountEnum): Promise<void> {
         if (exchange.toUpperCase() === ExchangeEnum.OKX.toUpperCase()) {
             await this.okxBuy(asset, false, account);
+        } else if (exchange.toUpperCase() === ExchangeEnum.BINGX.toUpperCase()) {
+            await this.bingxBuy(asset);
         } else {
-            await this.bingXBuy(asset);
+            await this.bitgetBuy(asset, account);
         }
     }
 
-    private async bingXBuy(asset: string): Promise<void> {
+    private async bingxBuy(asset: string): Promise<void> {
         const symbol = `${asset}${BINGX_OKX_POSTFIX_SYMBOL_USDT}`;
         const currentPrice = await X_BINGX_CLIENT.symbolPriceTicker({ symbol });
         if (await this.checkIsBuyOrNot(asset, currentPrice.data[0]?.trades[0].price)) {
             await this.bingxOrderService.buyMarket(symbol);
+        }
+    }
+
+    private async bitgetBuy(asset: string, account?: AccountEnum): Promise<void> {
+        const symbol = `${asset}${BITGET_POSTFIX_SYMBOL_USDT}`;
+        const tickerResponse = await BITGET_PUBLIC_CLIENT.getSpotTicker({ symbol });
+        if (tickerResponse.data.length > 0) {
+            const currentPrice = parseFloat(tickerResponse.data[0].askPr);
+            if (await this.checkIsBuyOrNot(asset, currentPrice)) {
+                await this.bitgetOrderService.buyMinimum(symbol, account);
+            }
         }
     }
 
@@ -98,13 +109,7 @@ export class DailyBuyCommand extends BaseCommand {
             if (getAverage.maxBuy < currentPrice || asset !== ASSETS.CRYPTO.BTC) {
                 return false;
             }
-            const { data: fngData } = await axios.get(FNG_API);
-            const fngIndex = Number(fngData.data[0].value);
-            if (fngIndex < MAX_FNG_TO_DAILY_BUY) {
-                return true;
-            } else {
-                return randomPercentage(1, 3);
-            }
+            return true;
         }
     }
 }

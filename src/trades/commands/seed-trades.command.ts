@@ -6,6 +6,7 @@ import { TradeBingxService } from '~trades/services/trade-bingx.service';
 import { TradeOkxService } from '~trades/services/trade-okx.service';
 import { OkxEarnService } from '~okx-api/services/okx-earn.service';
 import { ASSETS } from '~core/constants/crypto-code.constant';
+import { TradeBitgetService } from '~trades/services/trade-bitget.service';
 
 @Command({
     signature: 'seed-trades',
@@ -16,6 +17,7 @@ export class SeedTradesCommand extends BaseCommand {
     constructor(
         private dataSource: DataSource,
         private tradeBingxService: TradeBingxService,
+        private tradeBitgetService: TradeBitgetService,
         private tradeOkxService: TradeOkxService,
         private okxEarnService: OkxEarnService
     ) {
@@ -34,6 +36,8 @@ export class SeedTradesCommand extends BaseCommand {
                 await this.tradeBingxService.seedTradesBingx(AccountEnum.M);
                 await this.tradeOkxService.seedTradesOkx(AccountEnum.X);
                 await this.tradeOkxService.seedTradesOkx(AccountEnum.M);
+                await this.tradeBitgetService.seedTradesBitget(AccountEnum.X);
+                await this.tradeBitgetService.seedTradesBitget(AccountEnum.M);
             } catch (error) {
                 this.error(`Fail seed trades data. Error: ${error.message}`);
                 throw error;
