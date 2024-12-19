@@ -13,10 +13,10 @@ export const ASSETS = {
     }
 };
 
-export const BINANCE_SYMBOLS = {
+export const BINANCE_BITGET_SYMBOLS = {
     BTCUSDT: 'BTCUSDT',
     ETHUSDT: 'ETHUSDT',
-    SOLUSDT: 'SOLUSDT'
+    BGBUSDT: 'BGBUSDT'
 };
 
 export const OKX_BINGX_SYMBOLS = {
