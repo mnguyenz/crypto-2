@@ -4,9 +4,10 @@ import { AverageCalculationModule } from '~average-calculation/average-calculati
 import { BingxApiModule } from '~bingx-api/bingx-api.module';
 import { OkxApiModule } from '~okx-api/okx-api.module';
 import { DailySellCommand } from './commands/daily-sell.command';
+import { BitgetApiModule } from '~bitget-api/bitget-api.module';
 
 @Module({
-    imports: [AverageCalculationModule, BingxApiModule, OkxApiModule],
+    imports: [AverageCalculationModule, BingxApiModule, OkxApiModule, BitgetApiModule],
     providers: [DailyBuyCommand, DailySellCommand],
     exports: []
 })
