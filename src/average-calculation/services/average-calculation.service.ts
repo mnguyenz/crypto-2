@@ -60,7 +60,7 @@ export class AverageCalculationService {
         let remainingBuyAmount = 0;
         for (const trade of sortedBuyTrades) {
             const { price, quantity, asset, feeAsset, fee } = trade;
-            const finalQuantity = feeAsset === asset ? quantity - fee : quantity;
+            const finalQuantity = feeAsset === asset ? Number(quantity) - Number(fee) : Number(quantity);
 
             if (remainingSellQuantity > 0) {
                 if (remainingSellQuantity >= finalQuantity) {

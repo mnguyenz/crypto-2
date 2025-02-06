@@ -3,7 +3,6 @@ import { BaseCommand, Command } from '@hodfords/nestjs-command';
 import { BingxOrderService } from '~bingx-api/services/bingx-order.service';
 import { MIN_NOTIONAL, X_BINGX_CLIENT } from '~core/constants/bingx.constant';
 import { AverageCalculationService } from '~average-calculation/services/average-calculation.service';
-import axios from 'axios';
 import { FNG_API } from '~core/constants/apis.constant';
 import { OkxEarnService } from '~okx-api/services/okx-earn.service';
 import { AccountEnum, ExchangeEnum } from '~core/enums/exchanges.enum';
@@ -51,7 +50,7 @@ export class DailyBuyCommand extends BaseCommand {
         const options = this.program.opts();
         const { asset, exchange } = options;
         try {
-            await this.dailyBuy(asset || ASSETS.CRYPTO.BTC, exchange || ExchangeEnum.BITGET, AccountEnum.X);
+            await this.dailyBuy(asset || ASSETS.CRYPTO.ETH, exchange || ExchangeEnum.BITGET, AccountEnum.X);
         } catch (error) {
             this.error(`Fail Daily Buy. Error: ${error.message}`);
             throw error;
@@ -83,6 +82,12 @@ export class DailyBuyCommand extends BaseCommand {
             const currentPrice = parseFloat(tickerResponse.data[0].askPr);
             if (await this.checkIsBuyOrNot(asset, currentPrice)) {
                 await this.bitgetOrderService.buyMinimum(symbol, account);
+                if (asset !== ASSETS.CRYPTO.BTC) {
+                    await this.bitgetOrderService.buyMinimum(
+                        `${ASSETS.CRYPTO.BTC}${BITGET_POSTFIX_SYMBOL_USDT}`,
+                        account
+                    );
+                }
             }
         }
     }

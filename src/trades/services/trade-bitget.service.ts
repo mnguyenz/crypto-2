@@ -31,7 +31,7 @@ export class TradeBitgetService {
                 return {
                     orderIdReference: order.orderId,
                     tradeTime: order.uTime,
-                    asset: order.symbol.substring(0, 3),
+                    asset: order.symbol.substring(0, order.symbol.length - 4),
                     symbol: order.symbol,
                     side: order.side === 'buy' ? OrderSideEnum.BUY : OrderSideEnum.SELL,
                     price: parseFloat(order.priceAvg),

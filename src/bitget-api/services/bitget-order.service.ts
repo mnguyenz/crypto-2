@@ -21,7 +21,7 @@ export class BitgetOrderService {
             await client.earnRedeemSavings({
                 productId: flexibleUsdtProductId,
                 periodType: 'flexible',
-                amount: '1.2'
+                amount: '1.1'
             });
 
             await this.waitForUsdtAvailability(ASSETS.FIAT.USDT, account);

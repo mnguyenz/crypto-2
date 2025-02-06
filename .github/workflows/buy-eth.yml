@@ -1,11 +1,11 @@
-name: "Seed Trades"
+name: "Cronjob Buy ETH"
 
 on:
   schedule:
-    - cron: "35 * * * *"
+    - cron: "0 1,13 * * *"
 
 jobs:
-  seed-trades:
+  buy-eth:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,8 +24,8 @@ jobs:
       - name: Create Build Files
         run: npm run build
 
-      - name: Seed Trades
-        run: npm run wz-command seed-trades
+      - name: Buy ETH
+        run: npm run wz-command daily-buy -- --asset=ETH --exchange=Bitget
         env:
           DATABASE_CA_PEM: ${{ secrets.DATABASE_CA_PEM }}
           DATABASE_CONNECT: ${{ secrets.DATABASE_CONNECT }}
@@ -50,3 +50,4 @@ jobs:
           X_OKX_API_KEY: ${{ secrets.X_OKX_API_KEY }}
           X_OKX_API_PASS: ${{ secrets.X_OKX_API_PASS }}
           X_OKX_API_SECRET: ${{ secrets.X_OKX_API_SECRET }}
+
